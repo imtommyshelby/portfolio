@@ -1,205 +1,113 @@
 ---
 layout: ../../layouts/post.astro
-title: Minimal Docker Image Packaging for Vite SSR Projects
-description: Minimal Docker Image Packaging for Vite SSR Projects
-dateFormatted: Sep 1st, 2024
+title: Web Browsers - which to use
+description: Arc vs Chrome vs Safari
+dateFormatted: Jun 4th, 2023
 ---
 
-Recently, I've been preparing to migrate projects hosted on Cloudflare, Vercel, and Netlify to my own VPS to run via Docker. I revisited Docker image packaging. However, even a small project ended up being packaged into a 1.05GB image, which is clearly unacceptable. So, I researched minimal Docker image packaging for Node.js projects, reducing the image size from 1.06GB to 135MB.
+This is a detailed comparison of three popular web browsers—Arc, Chrome, and Safari—focusing on their security, safe browsing features, privacy, and data collection practices. This will help you understand the strengths and weaknesses of each browser to make an informed choice.
 
-The example project is an Astro project using Vite as the build tool, running in SSR mode.
+---
 
-## Version 0
+## Browser Comparison: Arc vs. Chrome vs. Safari
 
-> The main idea is to use a minimal system image, opting for the Alpine Linux image.
+When choosing a web browser, considerations about security, privacy, and data collection are crucial. Below is a comparison of Arc, Chrome, and Safari to help you determine which browser best meets your needs.
 
-Following the [Astro official documentation for Server-Side Rendering (SSR)](https://docs.astro.build/en/recipes/docker/#ssr), I replaced the base image with node:lts-alpine, and switched from NPM to PNPM. The resulting image size was 1.06GB, which is the worst-case scenario.
+### 1. **Arc Browser**
 
-```dockerfile
-FROM node:lts-alpine AS base
+Arc is a relatively new browser designed to offer a fresh approach to browsing with an emphasis on user experience and customization.
 
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+#### **Security**
+- **Sandboxing:** Arc uses Chromium’s sandboxing technology to isolate tabs and protect your system from malicious web content.
+- **Updates:** Regular updates are provided to patch vulnerabilities promptly.
+- **HTTPS Everywhere:** Arc supports HTTPS Everywhere to ensure secure connections.
 
-WORKDIR /app
+#### **Safe Browsing**
+- **Built-in Security Features:** Arc integrates built-in protection against malicious websites and phishing attempts, leveraging Chromium's security infrastructure.
+- **Customizable Security Settings:** Users can adjust security settings to enhance protection based on their needs.
 
-COPY . .
-RUN pnpm install --frozen-lockfile
-RUN export $(cat .env.example) && pnpm run build
+#### **Privacy**
+- **Minimal Data Collection:** Arc is relatively new, so its data collection policies are still evolving. However, it aims to minimize data collection compared to some larger browsers.
+- **Incognito Mode:** Supports incognito browsing with no history tracking.
 
-ENV HOST=0.0.0.0
-ENV PORT=4321
-EXPOSE 4321
-CMD node ./dist/server/entry.mjs
-```
+#### **Data Collection**
+- **Usage Data:** Arc collects minimal data, focusing on improving user experience rather than extensive data harvesting.
 
-```log
-docker build -t v0 .
-[+] Building 113.8s (11/11) FINISHED                                                                                                                                        docker:orbstack
- => [internal] load build definition from Dockerfile                                                                                                                                   0.0s
- => => transferring dockerfile: 346B                                                                                                                                                   0.0s
- => [internal] load metadata for docker.io/library/node:lts-alpine                                                                                                                     1.1s
- => [internal] load .dockerignore                                                                                                                                                      0.0s
- => => transferring context: 89B                                                                                                                                                       0.0s
- => [1/6] FROM docker.io/library/node:lts-alpine@sha256:1a526b97cace6b4006256570efa1a29cd1fe4b96a5301f8d48e87c5139438a45                                                               0.0s
- => [internal] load build context                                                                                                                                                      0.2s
- => => transferring context: 240.11kB                                                                                                                                                  0.2s
- => CACHED [2/6] RUN corepack enable                                                                                                                                                   0.0s
- => CACHED [3/6] WORKDIR /app                                                                                                                                                          0.0s
- => [4/6] COPY . .                                                                                                                                                                     2.0s
- => [5/6] RUN pnpm install --frozen-lockfile                                                                                                                                          85.7s
- => [6/6] RUN export $(cat .env.example) && pnpm run build                                                                                                      11.1s
- => exporting to image                                                                                                                                                                13.4s
- => => exporting layers                                                                                                                                                               13.4s
- => => writing image sha256:653236defcbb8d99d83dc550f1deb55e48b49d7925a295049806ebac8c104d4a                                                                                           0.0s
- => => naming to docker.io/library/v0
-```
+**Recommendation:** If you prefer a modern, customizable browser with an emphasis on user experience and privacy, Arc is a good choice.
 
-## Version 1
+**GitHub Repo:** [Arc Browser](https://github.com/arc-browser/arc)
 
-> The main idea is to first install production dependencies, creating the first layer. Then install all dependencies, package to generate JavaScript artifacts, creating the second layer. Finally, copy the production dependencies and JavaScript artifacts to the runtime environment.
+### 2. **Google Chrome**
 
-Following the [multi-stage build (using SSR)](https://docs.astro.build/en/recipes/docker/#multi-stage-build-using-ssr) approach, I reduced the image size to 306MB. This is a significant reduction, but the drawback is that **it requires explicitly specifying production dependencies; if any are missed, runtime errors will occur**.
+Chrome is one of the most widely used browsers, known for its speed and extensive feature set, but it has significant implications for privacy.
 
-```dockerfile
-FROM node:lts-alpine AS base
+#### **Security**
+- **Sandboxing:** Chrome uses advanced sandboxing to prevent malicious sites from affecting other parts of the system.
+- **Updates:** Regular updates and security patches are rolled out to address vulnerabilities.
+- **Safe Browsing:** Google’s Safe Browsing technology helps protect against dangerous sites.
 
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+#### **Safe Browsing**
+- **Phishing and Malware Protection:** Chrome’s Safe Browsing service provides real-time warnings about potentially harmful sites.
+- **Security Checkups:** Includes tools to check for compromised passwords and other security issues.
 
-WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
+#### **Privacy**
+- **Data Collection:** Chrome collects substantial data, including browsing history, search queries, and usage statistics. This data is used to improve services but can raise privacy concerns.
+- **Incognito Mode:** Offers privacy by not storing browsing history but does not prevent tracking by websites and advertisers.
 
-FROM base AS prod-deps
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+#### **Data Collection**
+- **Extensive Data Collection:** Google collects data to personalize ads and improve services. Users can manage privacy settings but still, a significant amount of data is collected.
 
-FROM base AS build-deps
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+**Recommendation:** Chrome is a strong choice for those who need robust performance and extensive features but are willing to trade off some privacy for convenience and integration with Google services.
 
-FROM build-deps AS build
-COPY . .
-RUN export $(cat .env.example) && pnpm run build
+**GitHub Repo:** [Chrome](https://github.com/chromium/chromium)
 
-FROM base AS runtime
-COPY --from=prod-deps /app/node_modules ./node_modules
-COPY --from=build /app/dist ./dist
+### 3. **Safari**
 
-ENV HOST=0.0.0.0
-ENV PORT=4321
-EXPOSE 4321
-CMD node ./dist/server/entry.mjs
-```
+Safari is Apple’s default browser, designed to work seamlessly with macOS and iOS, with a strong emphasis on privacy.
 
-```log
-docker build -t v1 .
-[+] Building 85.5s (15/15) FINISHED                                                                                                                                         docker:orbstack
- => [internal] load build definition from Dockerfile                                                                                                                                   0.1s
- => => transferring dockerfile: 680B                                                                                                                                                   0.0s
- => [internal] load metadata for docker.io/library/node:lts-alpine                                                                                                                     1.8s
- => [internal] load .dockerignore                                                                                                                                                      0.0s
- => => transferring context: 89B                                                                                                                                                       0.0s
- => [base 1/4] FROM docker.io/library/node:lts-alpine@sha256:1a526b97cace6b4006256570efa1a29cd1fe4b96a5301f8d48e87c5139438a45                                                          0.0s
- => [internal] load build context                                                                                                                                                      0.3s
- => => transferring context: 240.44kB                                                                                                                                                  0.2s
- => CACHED [base 2/4] RUN corepack enable                                                                                                                                              0.0s
- => CACHED [base 3/4] WORKDIR /app                                                                                                                                                     0.0s
- => [base 4/4] COPY package.json pnpm-lock.yaml ./                                                                                                                                     0.2s
- => [prod-deps 1/1] RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile                                                                           35.1s
- => [build-deps 1/1] RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile                                                                                 65.5s
- => [runtime 1/2] COPY --from=prod-deps /app/node_modules ./node_modules                                                                                                               5.9s
- => [build 1/2] COPY . .                                                                                                                                                               0.8s
- => [build 2/2] RUN export $(cat .env.example) && pnpm run build                                                                                                                       7.5s
- => [runtime 2/2] COPY --from=build /app/dist ./dist                                                                                                                                   0.1s
- => exporting to image                                                                                                                                                                 4.2s
- => => exporting layers                                                                                                                                                                4.1s
- => => writing image sha256:8ae6b2bddf0a7ac5f8ad45e6abb7d36a633e384cf476e45fb9132bdf70ed0c5f                                                                                           0.0s
- => => naming to docker.io/library/v1
-```
+#### **Security**
+- **Sandboxing:** Safari uses sandboxing to protect the system from potentially harmful web content.
+- **Updates:** Regular updates are provided to address security vulnerabilities.
+- **Intelligent Tracking Prevention (ITP):** Uses machine learning to block cross-site tracking.
 
-## Version 2
+#### **Safe Browsing**
+- **Phishing and Malware Protection:** Safari includes features to protect against phishing and malware.
+- **Privacy Report:** Provides a privacy report that shows which websites have been blocked from tracking.
 
-> The main idea is to inline node_modules into the JavaScript files, ultimately copying only the JavaScript files to the runtime environment.
+#### **Privacy**
+- **Enhanced Privacy Features:** Safari focuses on privacy with features like Intelligent Tracking Prevention and built-in anti-fingerprinting technologies.
+- **Minimal Data Collection:** Apple emphasizes privacy and data protection, collecting less data compared to Google Chrome.
 
-When I looked into Next.js, I remembered that node_modules could be inlined into JavaScript files, eliminating the need for node_modules. So, I researched and found that Vite SSR also supports this. Therefore, I decided to use the inlining method in the Docker environment, avoiding the need to copy node_modules, and only copying the final dist artifacts, reducing the image size to 135MB.
+#### **Data Collection**
+- **Limited Data Collection:** Safari collects minimal user data, focusing on maintaining user privacy. Apple’s approach is more privacy-centric compared to Google.
 
-Changes to the packaging script:
+**Recommendation:** Safari is ideal for users who prioritize privacy and are deeply integrated into the Apple ecosystem. It offers strong privacy features and minimal data collection.
 
-```js
-vite: {
-  ssr: {
-    noExternal: process.env.DOCKER ? !!process.env.DOCKER : undefined;
-  }
-}
-```
+**GitHub Repo:** [Safari](https://developer.apple.com/safari/)
 
-**The final Dockerfile is as follows**:
+### Summary
 
-```dockerfile
-FROM node:lts-alpine AS base
+Here’s a concise summary of the key points:
 
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+- **Arc:** 
+  - **Strengths:** Modern interface, customizable, minimal data collection.
+  - **Weaknesses:** New and evolving, so privacy policies are still developing.
+  
+- **Chrome:** 
+  - **Strengths:** Fast, feature-rich, extensive security measures.
+  - **Weaknesses:** Extensive data collection, privacy concerns.
 
-WORKDIR /app
-COPY package.json pnpm-lock.yaml ./
+- **Safari:** 
+  - **Strengths:** Strong privacy features, minimal data collection, well-integrated with Apple ecosystem.
+  - **Weaknesses:** Limited to Apple devices, fewer extensions compared to Chrome.
 
-# FROM base AS prod-deps
-# RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+**Choice Recommendation:**
+- For cutting-edge customization and minimal data collection, **Arc** is a great choice.
+- For performance and features with a willingness to trade off privacy, **Chrome** is suitable.
+- For superior privacy and integration with Apple devices, **Safari** is ideal.
 
-FROM base AS build-deps
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+Feel free to explore these browsers and choose the one that aligns best with your priorities for security, privacy, and overall browsing experience.
 
-FROM build-deps AS build
-COPY . .
-RUN export $(cat .env.example) && export DOCKER=true && pnpm run build
+--- 
 
-FROM base AS runtime
-# COPY --from=prod-deps /app/node_modules ./node_modules
-COPY --from=build /app/dist ./dist
-
-ENV HOST=0.0.0.0
-ENV PORT=4321
-EXPOSE 4321
-CMD node ./dist/server/entry.mjs
-```
-
-```log
- docker build -t v2 .
-[+] Building 24.9s (13/13) FINISHED                                                                                                                                         docker:orbstack
- => [internal] load build definition from Dockerfile                                                                                                                                   0.0s
- => => transferring dockerfile: 708B                                                                                                                                                   0.0s
- => [internal] load metadata for docker.io/library/node:lts-alpine                                                                                                                     1.7s
- => [internal] load .dockerignore                                                                                                                                                      0.0s
- => => transferring context: 89B                                                                                                                                                       0.0s
- => [base 1/4] FROM docker.io/library/node:lts-alpine@sha256:1a526b97cace6b4006256570efa1a29cd1fe4b96a5301f8d48e87c5139438a45                                                          0.0s
- => [internal] load build context                                                                                                                                                      0.3s
- => => transferring context: 240.47kB                                                                                                                                                  0.2s
- => CACHED [base 2/4] RUN corepack enable                                                                                                                                              0.0s
- => CACHED [base 3/4] WORKDIR /app                                                                                                                                                     0.0s
- => CACHED [base 4/4] COPY package.json pnpm-lock.yaml ./                                                                                                                              0.0s
- => CACHED [build-deps 1/1] RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile                                                                           0.0s
- => [build 1/2] COPY . .                                                                                                                                                               1.5s
- => [build 2/2] RUN export $(cat .env.example) && export DOCKER=true && pnpm run build                                                                                                15.0s
- => [runtime 1/1] COPY --from=build /app/dist ./dist                                                                                                                                   0.1s
- => exporting to image                                                                                                                                                                 0.1s
- => => exporting layers                                                                                                                                                                0.1s
- => => writing image sha256:0ed5c10162d1faf4208f5ea999fbcd133374acc0e682404c8b05220b38fd1eaf                                                                                           0.0s
- => => naming to docker.io/library/v2
-```
-
-In the end, the size was reduced from 1.06GB to 135MB, and the build time was reduced from 113.8s to 24.9s.
-
-```log
-docker images
-REPOSITORY                         TAG         IMAGE ID       CREATED          SIZE
-v2                                 latest      0ed5c10162d1   5 minutes ago    135MB
-v1                                 latest      8ae6b2bddf0a   6 minutes ago    306MB
-v0                                 latest      653236defcbb   11 minutes ago   1.06GB
-```
-
-The example project is open-source and can be viewed on [GitHub](https://github.com/ccbikai/BroadcastChannel/pkgs/container/broadcastchannel).
-
-[![BroadcastChannel](https://github.html.zone/ccbikai/BroadcastChannel)](https://github.com/ccbikai/BroadcastChannel)
+This comparison provides a thorough overview of Arc, Chrome, and Safari, focusing on their security, safe browsing, privacy features, and data collection practices to help you make an informed decision.

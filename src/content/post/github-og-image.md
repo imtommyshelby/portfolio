@@ -1,54 +1,171 @@
 ---
 layout: ../../layouts/post.astro
-title: Extract GitHub OpenGraph Images for Card Previews
-description: Extract GitHub OpenGraph Images for Card Previews
-dateFormatted: Dec 19th, 2023
+title: CLI Basics
+description: CLI Basics- A Comprehensive Guide
+dateFormatted: Feb 19th, 2024
 ---
 
-Previously, when sharing GitHub on my blog, I always used [GitHub Repository Card](https://gh-card.dev/) for sharing, but it doesn't have good support for Chinese and doesn't support line breaks.
+The Command Line Interface (CLI) is a powerful tool for interacting with your computer's operating system. Understanding CLI basics can significantly enhance your productivity, especially as a developer. Here's a guide to get you started with the CLI, including common commands, usage examples, and resources for further learning.
 
-[![ccbikai/cloudflare-worker-image - GitHub](https://gh-card.dev/repos/ccbikai/cloudflare-worker-image.svg?fullname=)](https://github.com/ccbikai/cloudflare-worker-image)
+## 1. **What is CLI?**
 
-Originally, I planned to create my own using [@vercel/og](https://vercel.com/docs/functions/edge-functions/og-image-generation), but I accidentally discovered that GitHub provides comprehensive and beautiful Open Graph images on Twitter. So, I wrote a script to extract and use them for blog previews.
+The Command Line Interface (CLI) allows you to interact with your computer using text-based commands. It provides a more direct and often faster way to perform tasks compared to graphical user interfaces (GUIs).
 
-## Demo
+![alt text](image-4.png)
 
-![nasa/fprime - GitHub](https://github.html.zone/nasa/fprime)
+## 2. **Basic Commands**
 
-![A framework for building Open Graph images](https://static.miantiao.me/share/9ZxTs8/RZHfnD.png)
+### 2.1 **Navigating the File System**
 
-In addition to repositories, GitHub's Open Graph also supports previews for Issue, Pull Request, Discussion, and Commit modules.
+- **`pwd`**: Print Working Directory
+  ```bash
+  $ pwd
+  /Users/username/Documents
+  ```
+  ![alt text](image-5.png)
 
-## Usage
+- **`ls`**: List Directory Contents
+  ```bash
+  $ ls
+  file1.txt  file2.txt  folder
+  ```
+ ![alt text](image-6.png)
 
-**Modify `.com` to `.html.zone` on any GitHub page**.
+- **`cd`**: Change Directory
+  ```bash
+  $ cd Documents
+  $ pwd
+  /Users/username/Documents
+  ```
+ ![alt text](image-7.png)
 
-For example, [https://github.com/vercel/next.js](https://github.com/vercel/next.js) => [https://github.html.zone/vercel/next.js](https://github.html.zone/vercel/next.js).
+### 2.2 **File Operations**
 
-### Previews
+- **`cp`**: Copy Files or Directories
+  ```bash
+  $ cp file1.txt file2.txt backup/
+  ```
+  ![alt text](image-8.png)
 
-#### Repo
+- **`mv`**: Move or Rename Files or Directories
+  ```bash
+  $ mv file1.txt file2.txt backup/
+  ```
+  ![alt text](image-9.png)
 
-![Repo](https://github.html.zone/vercel/next.js)
+- **`rm`**: Remove Files or Directories
+  ```bash
+  $ rm file1.txt
+  ```
+ ![alt text](image-10.png)
 
-#### Issue
+### 2.3 **Viewing File Content**
 
-![Issue](https://github.html.zone/vuejs/core/issues/9862)
+- **`cat`**: Concatenate and Display File Content
+  ```bash
+  $ cat file1.txt
+  ```
+  ![alt text](image-11.png)
 
-#### Pull Request
+- **`less`**: View File Content One Page at a Time
+  ```bash
+  $ less file1.txt
+  ```
+![alt text](image-12.png)
 
-![Pull Request](https://github.html.zone/lobehub/lobe-chat/pull/529)
+- **`grep`**: Search for Patterns in Files
+  ```bash
+  $ grep "search_term" file1.txt
+  ```
+  ![alt text](image-13.png)
 
-#### Discussion
+## 3. **Managing Processes**
 
-![Discussion](https://github.html.zone/lobehub/lobe-chat/discussions/551)
+- **`ps`**: Display Information About Running Processes
+  ```bash
+  $ ps aux
+  ```
+  ![alt text](image-14.png)
 
-#### Commit
+- **`top`**: Display a Dynamic View of System Processes
+  ```bash
+  $ top
+  ```
+  ![alt text](image-15.png)
 
-![Commit](https://github.html.zone/vercel/next.js/commit/a65fb162989fd00ca21534947538b8dbb6bf7f86)
+- **`kill`**: Terminate Processes
+  ```bash
+  $ kill 1234
+  ```
 
-## Source Code
+## 4. **Permissions and Ownership**
 
-The code has been shared on GitHub for those interested to explore.
+- **`chmod`**: Change File Permissions
+  ```bash
+  $ chmod 755 file1.txt
+  ```
 
-[![ccbikai/github-og-image - GitHub](https://github.html.zone/ccbikai/github-og-image)](https://github.com/ccbikai/github-og-image)
+- **`chown`**: Change File Owner and Group
+  ```bash
+  $ chown user:group file1.txt
+  ```
+
+## 5. **Creating and Managing Archives**
+
+- **`tar`**: Archive Files
+  ```bash
+  $ tar -cvf archive.tar file1.txt file2.txt
+  ```
+
+- **`zip`**: Compress Files into a ZIP Archive
+  ```bash
+  $ zip archive.zip file1.txt file2.txt
+  ```
+
+
+## 6. **Useful Resources**
+
+### 6.1 **YouTube Tutorials**
+
+- [Learn Linux Command Line Basics](https://www.youtube.com/watch?v=6w8nZ_2dQd8)
+- [Introduction to Command Line Interface](https://www.youtube.com/watch?v=V0wy8p6S7DU)
+- [CLI Basics for Beginners](https://www.youtube.com/watch?v=8h9s7rA4p2s)
+
+### 6.2 **GitHub Repositories**
+
+- [CLI Basics - Examples and Tutorials](https://github.com/cli-basics/examples)
+- [Awesome CLI Tools](https://github.com/cheat/cheat) - A collection of command line tools and tips.
+
+
+### 6.3 **Articles and Guides**
+
+- [The Ultimate Guide to Command Line Basics](https://www.makeuseof.com/tag/command-line-basics/)
+- [Command Line Crash Course](https://learnpythonthehardway.org/book/appendixa.html)
+
+
+## 7. **Demo: Creating and Listing Files**
+
+```bash
+# Create a directory
+$ mkdir demo_directory
+
+# Change into the directory
+$ cd demo_directory
+
+# Create a file
+$ touch demo_file.txt
+
+# List files
+$ ls
+demo_file.txt
+```
+
+![alt text](image-16.png)
+
+---
+
+With these basics, you're well on your way to becoming proficient with the CLI. As you continue to use these commands, you'll discover even more powerful ways to interact with your system.
+
+Happy coding!
+
+---

@@ -1,20 +1,44 @@
 [
 	{
-		"name": "Email.ML",
-		"description": "Minimalist temporary Email.",
-		"image": "/assets/images/projects/email.ml.png",
-		"url": "https://email.ml"
+		"name": "Energy Consumption LSTM",
+		"description": "Predicting Energy Consumption in US",
+		"image": "public/assets/images/projects/lstm.png",
+		"url": "https://github.com/imtommyshelby/Energy_Consupmtion_LSTM"
 	},
 	{
-		"name": "DNS.Surf",
-		"description": "Querying DNS Resolution Results in Different Regions Worldwide.",
-		"image": "/assets/images/projects/dns.surf.png",
-		"url": "https://dns.surf"
+		"name": "isitlegalto",
+		"description": "developing a PaaS for legal services in India",
+		"image": "public/assets/images/projects/iilt.png",
+		"url": "https://github.com/syncwave-automation/isitlegalto_MATHack2.0"
 	},
 	{
-		"name": "HTML.ZONE",
-		"description": "Web Toolbox.",
-		"image": "/assets/images/projects/html.zone.png",
-		"url": "https://html.zone"
+		"name": "Delta (VISU-NG)",
+		"description": "a human-centric, 3D-printed humanoid robot with environmental comprehension and interaction capabilities.",
+		"image": "public/assets/images/projects/Robot drawing.webp",
+		"url": "https://github.com/Delta-VITAP/TTS"
+	},
+	{
+		"name": "Zeyfer",
+		"description": "The intelligent mask has the ability to identify lung conditions and measure spo2, hear rate, and spirometry through the use of a microphone.",
+		"image": "public/assets/images/projects/zeyfer.jpeg",
+		"url": "https://github.com/imtommyshelby"
+	},
+	{
+		"name": "Household Energy Prediction",
+		"description": "developed multiple LSTM and CNN models to analyse energy consumption and predict energy usuage of India and USA.",
+		"image": "public/assets/images/projects/hackap.png",
+		"url": "https://github.com/jai-gaurav/HACKAP-2023/tree/main"
+	},
+	{
+		"name": "Smart Jacket",
+		"description": "developed a smart jacket for minors that can detect toxic gases during mining and give instant alert",
+		"image": "public/assets/images/projects/box.webp",
+		"url": "https://github.com/imtommyshelby"
+	},
+	{
+		"name": "Age and Gender Prediction",
+		"description": "a prediction tool to predict age and gender from any given image",
+		"image": "public/assets/images/projects/age.png",
+		"url": "https://github.com/imtommyshelby/Age-and-Gender-Classification"
 	}
 ]
