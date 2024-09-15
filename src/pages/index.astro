@@ -58,7 +58,7 @@ import Layout from "../layouts/main.astro";
 </Layout>
 
 <script>
-  function textTypingEffect(element, texts, delay = 100, textIndex = 0, index = 0) {
+  function textTypingEffect(element: any, texts: any, delay = 100, textIndex = 0, index = 0) {
     if (index < texts[textIndex].length) {
       element.textContent = texts[textIndex].substring(0, index + 1);
       index++;
