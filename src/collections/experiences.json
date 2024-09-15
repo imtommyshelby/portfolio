@@ -4,20 +4,20 @@
 		"role": "Best Beginners Team",
 		"company": "MLH IITDM HackByte 2.0",
 		"description": "created a one stop solution software for Indian Legal System",
-		"logo": "https://github.com/imtommyshelby/portfolio/blob/eb33527f0945df2d0566c4e8888aafd8ade8cf53/public/assets/images/experiences/65d61a0621324_hackbyte-20.jpeg"
+		"logo": "https://raw.githubusercontent.com/imtommyshelby/cdn/main/uploads/65d61a0621324_hackbyte-20.jpeg"
 	},
 	{
 		"dates": "July 2023",
 		"role": "Runner Up",
 		"company": "Andhra Pradesh Hackathon (Hack-AP)",
 		"description": "responsible for making LSTM model to analyse your electricity trends",
-		"logo": "https://github.com/imtommyshelby/portfolio/blob/eb33527f0945df2d0566c4e8888aafd8ade8cf53/public/assets/images/experiences/Hackap%20Hackathon%20Logo.jpg"
+		"logo": "https://raw.githubusercontent.com/imtommyshelby/cdn/main/uploads/Hackap%20Hackathon%20Logo.jpg"
 	},
 	{
 		"dates": "June 2023",
 		"role": "Winners",
 		"company": "V-SHODHAN Conference Paper",
 		"description": "wrote a paper describing the use of machine learning to predict population of India on certain factors.",
-		"logo": "public/assets/images/experiences/Vit-AP Logo.png"
+		"logo": "https://raw.githubusercontent.com/imtommyshelby/cdn/main/uploads/Vit-AP%20Logo.png"
 	}
 ]
