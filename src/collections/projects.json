@@ -2,7 +2,7 @@
 	{
 		"name": "Energy Consumption LSTM",
 		"description": "Predicting Energy Consumption in US",
-		"image": "public/assets/images/projects/lstm.png",
+		"image": "https://github.com/imtommyshelby/portfolio/blob/eb33527f0945df2d0566c4e8888aafd8ade8cf53/public/assets/images/projects/lstm.png",
 		"url": "https://github.com/imtommyshelby/Energy_Consupmtion_LSTM"
 	},
 	{
